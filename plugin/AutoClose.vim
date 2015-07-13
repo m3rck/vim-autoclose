@@ -257,6 +257,16 @@ function! s:OpenOrCloseTwinPair(char)
     endif
 endfunction
 
+" Tab through closed char "
+function! s:Tab()
+	
+	if exists("b:AutoCloseBuffer") && len(b:AutoCloseBuffer) > 0 && b:AutoCloseBuffer[0] == s:GetNextChar()
+		call s:PopBuffer()
+		return "\<Right>"
+	endif
+	return "\<Tab>"
+endfunction
+
 " maintain auto-close buffer when delete key is pressed
 function! s:Delete()
     let l:save_ve = &ve
@@ -453,6 +463,7 @@ function! s:CreateExtraMaps()
     " Extra mapping
     inoremap <buffer> <silent> <BS>         <C-R>=<SID>Backspace()<CR>
     inoremap <buffer> <silent> <Del>        <C-R>=<SID>Delete()<CR>
+	inoremap <buffer> <silent> <Tab> 		<C-R>=<SID>Tab()<CR>
     if b:AutoCloseExpandSpace
         inoremap <buffer> <silent> <Space>      <C-R>=<SID>Space()<CR>
     endif
